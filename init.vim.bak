@@ -1,19 +1,24 @@
+""-----------------------------------------------------------------------------------------------------
+"General Settings
+""-----------------------------------------------------------------------------------------------------
 set noerrorbells  "no sounds
 set tabstop=4 softtabstop=4
 set shiftwidth=4
 set expandtab
 set number    
 set nowrap "line continues forever
-set smartcase  "case sensetive searching
+set smartcase  "case sensitive searching
 set noswapfile
 set nobackup
-set undodir=~/.vim/undodir
-set undofile
+"set undodir=~/.vim/undodir
+"set undofile
 set incsearch
 set nocompatible
 set laststatus=2
 set relativenumber
 set smartindent
+set encoding=utf-8
+
 
 set colorcolumn=150
 
@@ -28,73 +33,124 @@ set mouse=a
 
 syntax on
 filetype off
+filetype plugin indent on
+
+
+""----------------------------------------------------------------------------------------------------------------
+"Plugins
+""----------------------------------------------------------------------------------------------------------------
+
+
 set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#begin()
 
 
 Plugin 'VundleVim/Vundle.vim'
-"Plugin 'itchyny/lightline.vim'
-Plugin 'morhetz/gruvbox'
+Plugin 'itchyny/lightline.vim'
+"Plugin 'morhetz/gruvbox'
 Plugin 'preservim/nerdtree'
 Plugin 'Yggdroot/indentLine'
-"Plugin 'Valloric/YouCompleteMe'
 Plugin 'neoclide/coc.nvim'
 "Plugin 'AutoComplPop'
-"Plugin 'shougo/deoplete.nvim'
-"Plugin 'kiteco/vim-plugin'
 Plugin 'mattn/emmet-vim'
 Plugin 'KeitaNakamura/neodark.vim'
 "airline
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
 Plugin 'sonph/onehalf', { 'rtp': 'vim' }
-Plugin 'felipec/notmuch-vim' "for email
+"Plugin 'felipec/notmuch-vim' "for email
 Plugin 'ap/vim-css-color'
 Plugin 'Raimondi/delimitMate'
-Plugin 'junegunn/goyo.vim'
-Plugin 'altercation/solarized'
-Plugin 'altercation/vim-colors-solarized'
+"Plugin 'junegunn/goyo.vim'
+"Plugin 'altercation/solarized'
+"Plugin 'altercation/vim-colors-solarized'
 Plugin 'arcticicestudio/nord-vim'
+Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plugin 'junegunn/fzf.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'vim-webdevicons'
+Plugin 'kyazdani42/nvim-web-devicons'
+"Plugin 'ryanoasis/vim-devicons'
+"Plugin 'akinsho/nvim-bufferline.lua'
+"Plugin 'lukas-reineke/indent-blankline.nvim'
+"Plugin 'romgrk/barbar.nvim'
+"Plugin 'yamatsum/nvim-cursorline'
+
 
 call vundle#end()
 
 
-filetype plugin indent on
+""----------------------------------------------------------------------------------------------------------------------
+"Colorscheme and GUIs
+""----------------------------------------------------------------------------------------------------------------------
 
 
-"theme for powerline
-"let g:airline_theme = 'gruvbox'
-"let g:airline_theme = 'onehalfdark'
-let g:airline_theme = 'neodark'
-
-set guifont=DroidSansMono\ Nerd\ Font\ 12
-
-
-"more airline settings including trinangular borders
-let g:airline#extensions#tabline#enabled = 1
-"let g:airline#extensions#tabline#left_sep = "\uE0B0"
-"let g:airline#extensions#tabline#left_alt_sep = "\uE0B0"
-"let g:airline#extensions#tabline#right_sep = "\uE0B2"
-"let g:airline#extensions#tabline#right_alt_sep = "\uE0B2"
-"set showtabline=2
-"let g:airline_powerline_fonts = 1
+set showtabline=2
 
 colorscheme nord
-"colorscheme neodark
 "colorscheme gruvbox
 "colorscheme onehalfdark
 
-let g:neodark#use_256color = 1 " default: 0
-let g:neodark#background = '#202020'
 
 
 set background=dark
 "hi Normal guibg=NONE ctermbg=black
 "autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
 
-"let g:lightline = {
-"      \ 'colorscheme': 'wombat',
-"      \ }
+"hi Cursor ctermbg=black ctermfg=yellow
+
+
+
+
+"for bufferline
+set termguicolors
+
+"for indentline
+let g:indentLine_char_list = ['┊']
+
+
+
+
+
+
+let g:lightline = {
+  \   'colorscheme': 'nord',
+  \   'active': {
+  \     'left':[ [ 'mode', 'paste' ],
+  \              [ 'gitbranch', 'readonly', 'filename', 'modified' ]
+  \     ]
+  \   },
+	\   'component': {
+	\     'lineinfo': ' %3l:%-2v',
+	\   },
+  \   'component_function': {
+  \     'gitbranch': 'fugitive#head',
+    \   'filetype': 'MyFiletype',
+    \   'fileformat': 'MyFileformat',
+  \   }
+  \ }
+let g:lightline.separator = {
+	\   'left': '', 'right': ''
+  \}
+let g:lightline.subseparator = {
+	\   'left': '', 'right': '' 
+  \}
+
+"also for lightline
+function! MyFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+endfunction
+
+function! MyFileformat()
+  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+endfunction
+
+""-------------------------------------------------------------------------------------------------------------
+"Mappings
+""-------------------------------------------------------------------------------------------------------------
+
+
+let mapleader=" "
+set timeoutlen=150
+
 
 nnoremap j n
 nnoremap J N
@@ -116,22 +172,17 @@ vnoremap s l
 vnoremap <C-c> "+y
 map <C-p> "+P
 
+"fuzzyfinder
+map <M-f> :Files<CR>
 
-set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
 
-"powerline lines
-" Always show statusline
- set laststatus=2
-" Use 256 colours (Use this setting only if your terminal supports 256
-" colours)
-set t_Co=256
+
+
 
   
-let mapleader=" "
-"set timeoutlen=150
 
 "check spelling
-set spell spelllang=en_us
+"set spell spelllang=en_us
 
 "save file
 noremap <leader>s   :w<CR>        
@@ -205,4 +256,12 @@ function! AraType()
     set keymap=arabic
     set rightleft
 endfunction
+
+
+"for blankline
+if len(nvim_list_uis())
+    " your side effect code
+
+endif
+
 
