@@ -16,6 +16,8 @@ set ignorecase
 syntax on
 set tabstop=4 softtabstop=4
 set shiftwidth=4
+set splitbelow splitright
+set mouse=a
 "set cursorline
 
 "Plugins
@@ -34,7 +36,7 @@ Plugin 'tpope/vim-fugitive'
 call vundle#end()
 
 "GUI and coloscheme
-colorscheme nord
+colorscheme gruvbox
 set background=dark
 set termguicolors
 let g:indentLine_char_list = ['┊']
@@ -55,11 +57,26 @@ vnoremap <C-c> "+y
 map <C-p> "+P
 map <M-f> :Files<CR>
 let NERDTreeMapOpenInTab='<C-t>'
-noremap <leader>n   :NERDTree<cr>
-vnoremap <leader>n   :NERDTree<cr>
-noremap <leader>w  <C-w><C-w> 
+noremap <leader>n   :NERDTreeToggle<cr>
+vnoremap <leader>n   :NERDTreeToggle<cr>
 vnoremap T  :m '>+1<CR>gv=gv
 vnoremap N  :m '<-2<CR>gv=gv
+noremap <leader>ww  <C-w><C-w> 
+nnoremap <leader>w-	:split<cr>
+nnoremap <leader>wv	:vsplit<cr>
+nnoremap <leader>wh	<C-w>h
+nnoremap <leader>wt	<C-w>j
+nnoremap <leader>wn	<C-w>k
+nnoremap <leader>ws	<C-w>l
+nmap <C-Right>	:vertical resize +3<cr>
+nmap <C-Up>	:resize +3<cr>
+nmap <C-Down>	:resize -3<cr>
+nmap <C-Left>	:vertical resize -3<cr>
+nnoremap <leader>t	:vnew term://zsh<cr>
+tnoremap <Esc>  <C-\><C-n>
+nnoremap <leader>gg	:G<cr>
+nnoremap <leader>gs :G status<cr>
+nnoremap <leader>gc :G commit<cr>
 
 "COC
 source $HOME/.config/nvim/plug-config/coc.vim
