@@ -1,0 +1,6 @@
+{
+	 "clangd.enabled": true,
+	 "clangd.semanticHighlighting":true,
+	 "diagnostic.checkCurrentLine": false,
+	 "diagnostic.displayByAle":true
+}

@@ -1,0 +1,140 @@
+"General settings
+set nowrap "line continues forever
+set smartcase  "case sensitive searching
+set noswapfile
+set nobackup
+set incsearch
+set number
+set relativenumber
+set encoding=utf-8
+set noautoindent
+filetype indent plugin on
+set wildmenu
+set showcmd
+set hlsearch
+set ignorecase
+syntax on
+set tabstop=4 softtabstop=4
+set shiftwidth=4
+set splitbelow splitright
+set mouse=a
+set spell spelllang=en_us
+"set cursorline
+set linebreak "when wrap is set, words don't break
+
+"Plugins
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'preservim/nerdtree'
+Plugin 'morhetz/gruvbox'
+Plugin 'Yggdroot/indentLine'
+Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+Plugin 'Raimondi/delimitMate'
+Plugin 'arcticicestudio/nord-vim'
+Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plugin 'junegunn/fzf.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'psliwka/vim-smoothie'
+Plugin 'itchyny/lightline.vim'
+Plugin 'dense-analysis/ale'
+Plugin 'ap/vim-css-color'
+Plugin 'dracula/vim'
+Plugin 'mattn/emmet-vim'
+Plugin 'nekonako/xresources-nvim'
+call vundle#end()
+
+"GUI and coloscheme
+"colorscheme dracula
+colorscheme xresources
+set background=dark
+"autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE "transparent bg
+set termguicolors
+let g:indentLine_char_list = ['┊']
+
+"Mappings
+let mapleader=" "
+set timeoutlen=500
+nnoremap j n
+nnoremap J N
+nnoremap t j
+vnoremap t j
+nnoremap n k
+vnoremap n k
+nnoremap s l
+vnoremap s l
+
+vnoremap <C-c> "+y
+map <C-p> "+P
+map <M-f> :Files<CR>
+let NERDTreeMapOpenInTab='<C-t>'
+noremap <leader>n   :NERDTreeToggle<cr>
+vnoremap <leader>n   :NERDTreeToggle<cr>
+vnoremap T  :m '>+1<CR>gv=gv
+vnoremap N  :m '<-2<CR>gv=gv
+noremap <leader>w  <C-w><C-w> 
+nnoremap <leader>-	:split<cr>
+nnoremap <leader>_	:vsplit<cr>
+nmap <C-Right>	:vertical resize +3<cr>
+nmap <C-Up>	:resize +3<cr>
+nmap <C-Down>	:resize -3<cr>
+nmap <C-Left>	:vertical resize -3<cr>
+nnoremap <leader>t	:vnew term://zsh<cr>
+tnoremap <Esc>  <C-\><C-n>
+nnoremap <leader>gg	:G<cr>
+nnoremap <leader>gs :G status<cr>
+nnoremap <leader>gc :G commit<cr>
+nnoremap <leader><leader> <Esc>/<++><CR><Esc>cf>
+
+
+""COC
+source $HOME/.config/nvim/plug-config/coc.vim
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+
+"autocommands
+autocmd BufWritePost *.ms !groff -U -m hdtbl -ms -t -mpic -e *.ms -T pdf groff.pdf > groff.pdf
+autocmd BufWritePost *.tex !pdflatex test.tex
+autocmd BufWritePost */home/wifiengine/.source/dwm-6.2/* !sudo make install
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+"lightline
+let g:lightline = {
+  \   'colorscheme': 'dracula',
+  \   'active': {
+  \     'left':[ [ 'mode', 'paste' ],
+  \              [ 'gitbranch', 'readonly', 'filename', 'modified' ]
+  \     ]
+  \   },
+	\   'component': {
+	\     'lineinfo': ' %3l:%-2v',
+	\   },
+  \   'component_function': {
+  \     'gitbranch': 'fugitive#head',
+    \   'filetype': 'MyFiletype',
+    \   'fileformat': 'MyFileformat',
+  \   }
+  \ }
+
+"linting with ALE
+let g:ale_sign_error = '●'
+let g:ale_sign_warning = '.'
+
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+    return l:counts.total == 0 ? 'OK' : printf(
+        \   '%d⨉ %d⚠ ',
+        \   all_non_errors,
+        \   all_errors
+        \)
+endfunction
+set statusline+=%=
+set statusline+=\ %{LinterStatus()}
+
+"emmet maps
+"let g:user_emmet_mode='n'   "only enable in normal mode
+let g:user_emmet_leader_key=','
+
